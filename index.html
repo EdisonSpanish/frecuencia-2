@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 1000 Most Frequent Spanish Words, Part 2</title>
+    <style>
+        body {
+            background-color: #e6ffe6; /* Verde claro */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #006600; /* Verde oscuro */
+        }
+        #question {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #006600;
+        }
+        #context {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #008000; /* Verde intermedio */
+        }
+        #translation {
+            font-size: 16px;
+            margin: 5px 0;
+            color: #009900; /* Verde más claro */
+            font-style: italic;
+        }
+        .option {
+            display: block;
+            background-color: #ccffcc; /* Verde más claro */
+            padding: 10px;
+            margin: 10px auto;
+            width: 200px;
+            border: 2px solid #006600;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #99ff99;
+        }
+        #message {
+            font-size: 18px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>The 1000 Most Frequent Spanish Words, Part 2</h1>
+    <div id="question"></div>
+    <div id="context"></div>
+    <div id="translation"></div>
+    <div id="options"></div>
+    <div id="message"></div>
+
+    <script>
+        const words = [
+            { spanish: "tener", english: "to have", context: "I want to have a dog.", translation: "Quiero tener un perro." },
+            { spanish: "sistema", english: "system", context: "The system works perfectly.", translation: "El sistema funciona perfectamente." },
+            { spanish: "será", english: "will be", context: "Tomorrow will be sunny.", translation: "Mañana será soleado." },
+            { spanish: "historia", english: "history", context: "History teaches us many lessons.", translation: "La historia nos enseña muchas lecciones." },
+            { spanish: "muchos", english: "many", context: "Many people like this song.", translation: "Muchos quieren esta canción." },
+            { spanish: "tipo", english: "type", context: "What type of food do you like?", translation: "¿Qué tipo de comida te gusta?" },
+            { spanish: "cuatro", english: "four", context: "I have four siblings.", translation: "Tengo cuatro hermanos." },
+            { spanish: "dentro", english: "inside", context: "The cat is inside the box.", translation: "El gato está dentro de la caja." },
+            { spanish: "nuestro", english: "our", context: "This is our home.", translation: "Esta es nuestra casa." },
+            { spanish: "punto", english: "point", context: "That’s a good point.", translation: "Ese es un buen punto." },
+            { spanish: "dice", english: "says", context: "He says it’s true.", translation: "Dice que es verdad." },
+            { spanish: "ello", english: "it", context: "Think about it carefully.", translation: "Piensa en ello cuidadosamente." },
+            { spanish: "cualquier", english: "any", context: "You can choose any color.", translation: "Puedes elegir cualquier color." },
+            { spanish: "noche", english: "night", context: "The night is very quiet.", translation: "La noche es muy tranquila." },
+            { spanish: "aún", english: "still", context: "I’m still waiting for you.", translation: "Aún te estoy esperando." },
+            { spanish: "agua", english: "water", context: "The water is cold today.", translation: "El agua está fría hoy." },
+            { spanish: "parece", english: "seems", context: "It seems like a good idea.", translation: "Parece una buena idea." },
+            { spanish: "haber", english: "to have", context: "There must have been a mistake.", translation: "Debe haber habido un error." },
+            { spanish: "situación", english: "situation", context: "The situation is complicated.", translation: "La situación es complicada." },
+            { spanish: "fuera", english: "outside", context: "Let’s go outside now.", translation: "Salgamos fuera ahora." },
+            { spanish: "bajo", english: "under", context: "The ball is under the table.", translation: "La pelota está bajo la mesa." },
+            { spanish: "grandes", english: "large", context: "They have large windows.", translation: "Tienen ventanas grandes." },
+            { spanish: "nuestra", english: "our", context: "Our team won the game.", translation: "Nuestro equipo ganó el juego." },
+            { spanish: "ejemplo", english: "example", context: "This is a good example.", translation: "Este es un buen ejemplo." },
+            { spanish: "acuerdo", english: "agreement", context: "We reached an agreement.", translation: "Llegamos a un acuerdo." },
+            { spanish: "habían", english: "there were", context: "There were many people there.", translation: "Había muchas personas allí." },
+            { spanish: "usted", english: "you", context: "Can you help me?", translation: "¿Puede usted ayudarme?" },
+            { spanish: "estados", english: "states", context: "The states voted yesterday.", translation: "Los estados votaron ayer." },
+            { spanish: "hizo", english: "did", context: "She did her homework.", translation: "Ella hizo su tarea." },
+            { spanish: "nadie", english: "nobody", context: "Nobody knows the answer.", translation: "Nadie sabe la respuesta." },
+            { spanish: "países", english: "countries", context: "Many countries are involved.", translation: "Muchos países están involucrados." },
+            { spanish: "horas", english: "hours", context: "I worked for three hours.", translation: "Trabajé por tres horas." },
+            { spanish: "posible", english: "possible", context: "It’s not possible today.", translation: "No es posible hoy." },
+            { spanish: "tarde", english: "afternoon", context: "See you this afternoon.", translation: "Te veo esta tarde." },
+            { spanish: "ley", english: "law", context: "The law protects everyone.", translation: "La ley protege a todos." },
+            { spanish: "importante", english: "important", context: "This is very important.", translation: "Esto es muy importante." },
+            { spanish: "guerra", english: "war", context: "The war ended last year.", translation: "La guerra terminó el año pasado." },
+            { spanish: "desarrollo", english: "development", context: "Development takes time.", translation: "El desarrollo toma tiempo." },
+            { spanish: "proceso", english: "process", context: "The process is slow.", translation: "El proceso es lento." },
+            { spanish: "realidad", english: "reality", context: "Reality is different.", translation: "La realidad es diferente." },
+            { spanish: "sentido", english: "sense", context: "It makes no sense.", translation: "No tiene sentido." },
+            { spanish: "lado", english: "side", context: "Stay by my side.", translation: "Quédate a mi lado." },
+            { spanish: "mí", english: "me", context: "Look at me now.", translation: "Mírame ahora." },
+            { spanish: "tu", english: "your", context: "This is your book.", translation: "Este es tu libro." },
+            { spanish: "cambio", english: "change", context: "I need a change.", translation: "Necesito un cambio." },
+            { spanish: "allí", english: "there", context: "The car is over there.", translation: "El coche está allí." },
+            { spanish: "mano", english: "hand", context: "Hold my hand.", translation: "Toma mi mano." },
+            { spanish: "eran", english: "were", context: "They were my friends.", translation: "Eran mis amigos." },
+            { spanish: "estar", english: "to be", context: "I want to be happy.", translation: "Quiero estar feliz." },
+            { spanish: "número", english: "number", context: "What’s your number?", translation: "¿Cuál es tu número?" },
+            { spanish: "sociedad", english: "society", context: "Society needs rules.", translation: "La sociedad necesita reglas." },
+            { spanish: "unas", english: "some", context: "I bought some flowers.", translation: "Compré unas flores." },
+            { spanish: "centro", english: "center", context: "The park is in the center.", translation: "El parque está en el centro." },
+            { spanish: "padre", english: "father", context: "My father is kind.", translation: "Mi padre es amable." },
+            { spanish: "gente", english: "people", context: "The people are friendly.", translation: "La gente es amigable." },
+            { spanish: "final", english: "final", context: "This is the final decision.", translation: "Esta es la decisión final." },
+            { spanish: "relación", english: "relationship", context: "We have a good relationship.", translation: "Tenemos una buena relación." },
+            { spanish: "cuerpo", english: "body", context: "The body needs rest.", translation: "El cuerpo necesita descansar." },
+            { spanish: "obra", english: "work", context: "This is a great work of art.", translation: "Esta es una gran obra de arte." },
+            { spanish: "incluso", english: "even", context: "Even I can do it.", translation: "Incluso yo puedo hacerlo." },
+            { spanish: "través", english: "through", context: "We walked through the forest.", translation: "Caminamos a través del bosque." },
+            { spanish: "último", english: "last", context: "This is the last chance.", translation: "Esta es la última oportunidad." },
+            { spanish: "madre", english: "mother", context: "My mother cooks well.", translation: "Mi madre cocina bien." },
+            { spanish: "mis", english: "my", context: "These are my shoes.", translation: "Estos son mis zapatos." },
+            { spanish: "modo", english: "mode", context: "Do it in this mode.", translation: "Hazlo de este modo." },
+            { spanish: "problemas", english: "problems", context: "We have some problems.", translation: "Tenemos algunos problemas." },
+            { spanish: "cinco", english: "five", context: "I need five minutes.", translation: "Necesito cinco minutos." },
+            { spanish: "hombres", english: "men", context: "The men are working.", translation: "Los hombres están trabajando." },
+            { spanish: "información", english: "information", context: "I need more information.", translation: "Necesito más información." },
+            { spanish: "ojos", english: "eyes", context: "Her eyes are blue.", translation: "Sus ojos son azules." },
+            { spanish: "muerte", english: "death", context: "Death is a mystery.", translation: "La muerte es un misterio." },
+            { spanish: "nombre", english: "name", context: "What’s your name?", translation: "¿Cuál es tu nombre?" },
+            { spanish: "algunas", english: "some", context: "I ate some cookies.", translation: "Comí algunas galletas." },
+            { spanish: "público", english: "public", context: "The park is public.", translation: "El parque es público." },
+            { spanish: "mujeres", english: "women", context: "The women are strong.", translation: "Las mujeres son fuertes." },
+            { spanish: "siglo", english: "century", context: "This is the 21st century.", translation: "Este es el siglo XXI." },
+            { spanish: "todavía", english: "still", context: "I’m still here.", translation: "Todavía estoy aquí." },
+            { spanish: "meses", english: "months", context: "It took six months.", translation: "Tomó seis meses." },
+            { spanish: "mañana", english: "morning", context: "See you tomorrow morning.", translation: "Te veo mañana por la mañana." },
+            { spanish: "esos", english: "those", context: "Those books are old.", translation: "Esos libros son viejos." },
+            { spanish: "nosotros", english: "we", context: "We are a team.", translation: "Nosotros vivimos un equipo." },
+            { spanish: "hora", english: "hour", context: "It’s one hour away.", translation: "Está a una hora de distancia." },
+            { spanish: "muchas", english: "many", context: "Many flowers bloom here.", translation: "Muchas flores florecen aquí." },
+            { spanish: "pueblo", english: "town", context: "The town is small.", translation: "El pueblo es pequeño." },
+            { spanish: "alguna", english: "some", context: "Do you have some water?", translation: "¿Tienes alguna agua?" },
+            { spanish: "dar", english: "to give", context: "Give me a pen, please.", translation: "Dame un bolígrafo, por favor." },
+            { spanish: "problema", english: "problem", context: "There’s no problem here.", translation: "No hay problema aquí." },
+            { spanish: "da", english: "gives", context: "She gives me a smile.", translation: "Ella me da una sonrisa." },
+            { spanish: "tú", english: "you", context: "You are my friend.", translation: "Tú eres mi amigo." },
+            { spanish: "derecho", english: "right", context: "You have the right to speak.", translation: "Tienes el derecho de hablar." },
+            { spanish: "verdad", english: "truth", context: "Tell me the truth.", translation: "Dime la verdad." },
+            { spanish: "unidos", english: "united", context: "We are united as a team.", translation: "Estamos unidos como equipo." },
+            { spanish: "podría", english: "could", context: "I could help you.", translation: "Podría ayudarte." },
+            { spanish: "sería", english: "would be", context: "It would be nice.", translation: "Sería bonito." },
+            { spanish: "junto", english: "together", context: "We’ll go together.", translation: "Iremos juntos." },
+            { spanish: "cabeza", english: "head", context: "My head hurts.", translation: "Me duele la cabeza." },
+            { spanish: "aquel", english: "that", context: "That house is old.", translation: "Aquella casa es vieja." },
+            { spanish: "cuanto", english: "as much", context: "Take as much as you want.", translation: "Toma cuanto quieras." },
+            { spanish: "tierra", english: "earth", context: "The earth is beautiful.", translation: "La tierra es hermosa." },
+            { spanish: "equipo", english: "team", context: "Our team is strong.", translation: "Nuestro equipo es fuerte." },
+            { spanish: "segundo", english: "second", context: "Wait a second.", translation: "Espera un segundo." },
+            { spanish: "director", english: "director", context: "The director is busy.", translation: "El director está ocupado." },
+            { spanish: "dicho", english: "said", context: "It’s been said before.", translation: "Ha sido dicho antes." },
+            { spanish: "cierto", english: "certain", context: "That’s a certain fact.", translation: "Eso es un hecho cierto." },
+            { spanish: "casos", english: "cases", context: "There are many cases.", translation: "Hay muchos casos." },
+            { spanish: "manos", english: "hands", context: "Wash your hands.", translation: "Lava tus manos." },
+            { spanish: "nivel", english: "level", context: "It’s a high level.", translation: "Es un nivel alto." },
+            { spanish: "podía", english: "could", context: "I could see the stars.", translation: "Podía ver las estrellas." },
+            { spanish: "familia", english: "family", context: "My family is big.", translation: "Mi familia es grande." },
+            { spanish: "largo", english: "long", context: "It’s a long road.", translation: "Es un camino largo." },
+            { spanish: "partir", english: "from", context: "From now on, I’ll try.", translation: "A partir de ahora, lo intentaré." },
+            { spanish: "falta", english: "lack", context: "There’s a lack of time.", translation: "Falta tiempo." },
+            { spanish: "llegar", english: "to arrive", context: "I’ll arrive soon.", translation: "Llegaré pronto." },
+            { spanish: "propio", english: "own", context: "It’s my own idea.", translation: "Es mi propia idea." },
+            { spanish: "ministro", english: "minister", context: "The minister spoke today.", translation: "El ministro habló hoy." },
+            { spanish: "cosa", english: "thing", context: "It’s a small thing.", translation: "Es una cosa pequeña." },
+            { spanish: "primero", english: "first", context: "First, let’s eat.", translation: "Primero, comamos." },
+            { spanish: "seguridad", english: "security", context: "Security is important.", translation: "La seguridad es importante." },
+            { spanish: "hemos", english: "we have", context: "We have finished.", translation: "Hemos terminado." },
+            { spanish: "mal", english: "bad", context: "It’s a bad day.", translation: "Es un mal día." },
+            { spanish: "trata", english: "deals", context: "This book deals with love.", translation: "Este libro trata de amor." },
+            { spanish: "algún", english: "some", context: "Is there some problem?", translation: "¿Hay algún problema?" },
+            { spanish: "tuvo", english: "had", context: "She had a great time.", translation: "Ella tuvo un gran momento." },
+            { spanish: "respecto", english: "regarding", context: "Regarding your question, yes.", translation: "Respecto a tu pregunta, sí." },
+            { spanish: "semana", english: "week", context: "I’ll see you next week.", translation: "Te veré la próxima semana." },
+            { spanish: "varios", english: "several", context: "I have several ideas.", translation: "Tengo varias ideas." },
+            { spanish: "real", english: "real", context: "It’s a real story.", translation: "Es una historia real." },
+            { spanish: "sé", english: "I know", context: "I know the answer.", translation: "Sé la respuesta." },
+            { spanish: "voz", english: "voice", context: "Her voice is soft.", translation: "Su voz es suave." },
+            { spanish: "paso", english: "step", context: "Take one step forward.", translation: "Da un paso adelante." },
+            { spanish: "mil", english: "thousand", context: "It costs a thousand dollars.", translation: "Cuesta mil dólares." },
+            { spanish: "quienes", english: "who", context: "Those who win will celebrate.", translation: "Quienes ganen celebrarán." },
+            { spanish: "proyecto", english: "project", context: "The project is big.", translation: "El proyecto es grande." },
+            { spanish: "mercado", english: "market", context: "The market is busy.", translation: "El mercado está ocupado." },
+            { spanish: "mayoría", english: "majority", context: "The majority agrees.", translation: "La mayoría está de acuerdo." },
+            { spanish: "luz", english: "light", context: "Turn on the light.", translation: "Enciende la luz." },
+            { spanish: "claro", english: "clear", context: "It’s very clear now.", translation: "Está muy claro ahora." },
+            { spanish: "iba", english: "was going", context: "I was going to the park.", translation: "Iba al parque." },
+            { spanish: "éste", english: "this", context: "This one is mine.", translation: "Éste es mío." },
+            { spanish: "pesetas", english: "pesetas", context: "It costs 100 pesetas.", translation: "Cuesta 100 pesetas." },
+            { spanish: "orden", english: "order", context: "Put it in order.", translation: "Ponlo en orden." },
+            { spanish: "español", english: "Spanish", context: "I speak Spanish.", translation: "Hablo español." },
+            { spanish: "buena", english: "good", context: "She’s a good friend.", translation: "Es una buena amiga." },
+            { spanish: "quiere", english: "wants", context: "He wants a new car.", translation: "Quiere un coche nuevo." },
+            { spanish: "aquella", english: "that", context: "That day was special.", translation: "Aquella día fue especial." },
+            { spanish: "programa", english: "program", context: "The program starts now.", translation: "El programa empieza ahora." },
+            { spanish: "palabras", english: "words", context: "Choose your words carefully.", translation: "Elige tus palabras cuidadosamente." },
+            { spanish: "internacional", english: "international", context: "It’s an international event.", translation: "Es un evento internacional." },
+            { spanish: "van", english: "go", context: "They go to school.", translation: "Van a la escuela." },
+            { spanish: "esas", english: "those", context: "Those flowers are pretty.", translation: "Esas flores son bonitas." },
+            { spanish: "segunda", english: "second", context: "This is my second try.", translation: "Este es mi segundo intento." },
+            { spanish: "empresa", english: "company", context: "The company is growing.", translation: "La empresa está creciendo." },
+            { spanish: "puesto", english: "position", context: "He took my position.", translation: "Tomó mi puesto." },
+            { spanish: "ahí", english: "there", context: "Look over there!", translation: "¡Mira ahí!" },
+            { spanish: "propia", english: "own", context: "It’s her own house.", translation: "Es su propia casa." },
+            { spanish: "libro", english: "book", context: "I read a good book.", translation: "Leí un buen libro." },
+            { spanish: "igual", english: "equal", context: "We are all equal.", translation: "Todos somos iguales." },
+            { spanish: "político", english: "political", context: "It’s a political decision.", translation: "Es una decisión política." },
+            { spanish: "persona", english: "person", context: "She’s a nice person.", translation: "Es una persona agradable." },
+            { spanish: "últimos", english: "last", context: "The last days were busy.", translation: "Los últimos días fueron ocupados." },
+            { spanish: "ellas", english: "they", context: "They are my sisters.", translation: "Ellas son mis hermanas." },
+            { spanish: "total", english: "total", context: "The total is 50 dollars.", translation: "El total es 50 dólares." },
+            { spanish: "creo", english: "I believe", context: "I believe it’s true.", translation: "Creo que es verdad." },
+            { spanish: "tengo", english: "I have", context: "I have a new idea.", translation: "Tengo una nueva idea." },
+            { spanish: "dios", english: "god", context: "God bless you.", translation: "Dios te bendiga." },
+            { spanish: "española", english: "Spanish", context: "She’s a Spanish teacher.", translation: "Es una profesora española." },
+            { spanish: "condiciones", english: "conditions", context: "The conditions are good.", translation: "Las condiciones son buenas." },
+            { spanish: "fuerza", english: "force", context: "Use more force.", translation: "Usa más fuerza." },
+            { spanish: "solo", english: "alone", context: "I’m alone at home.", translation: "Estoy solo en casa." },
+            { spanish: "único", english: "unique", context: "It’s a unique gift.", translation: "Es un regalo único." },
+            { spanish: "acción", english: "action", context: "Take action now.", translation: "Toma acción ahora." },
+            { spanish: "amor", english: "love", context: "Love is beautiful.", translation: "El amor es hermoso." },
+            { spanish: "policía", english: "police", context: "The police arrived quickly.", translation: "La policía llegó rápido." },
+            { spanish: "puerta", english: "door", context: "Open the door, please.", translation: "Abre la puerta, por favor." },
+            { spanish: "pesar", english: "despite", context: "Despite the rain, we went.", translation: "A pesar de la lluvia, fuimos." },
+            { spanish: "zona", english: "zone", context: "This is a quiet zone.", translation: "Esta es una zona tranquila." },
+            { spanish: "sabe", english: "knows", context: "She knows the truth.", translation: "Ella sabe la verdad." },
+            { spanish: "calle", english: "street", context: "The street is busy.", translation: "La calle está ocupada." },
+            { spanish: "interior", english: "interior", context: "The interior is nice.", translation: "El interior es bonito." },
+            { spanish: "tampoco", english: "neither", context: "I don’t like it, neither do you.", translation: "No me gusta, tampoco a ti." },
+            { spanish: "música", english: "music", context: "The music is loud.", translation: "La música está alta." }
+        ];
+
+        let currentIndex = 0;
+
+        function loadQuestion() {
+            const word = words[currentIndex];
+            document.getElementById("question").innerText = `What is "${word.english}"?`;
+            document.getElementById("context").innerText = word.context;
+            document.getElementById("translation").innerText = word.translation;
+            const options = generateOptions(word.spanish);
+            document.getElementById("options").innerHTML = options.map((opt, i) => 
+                `<div class="option" onclick="checkAnswer('${opt}', '${word.spanish}')">${opt}</div>`).join("");
+            document.getElementById("message").innerText = "";
+        }
+
+        function generateOptions(correctAnswer) {
+            const options = [correctAnswer];
+            while (options.length < 4) {
+                const randomWord = words[Math.floor(Math.random() * words.length)].spanish;
+                if (!options.includes(randomWord)) options.push(randomWord);
+            }
+            return options.sort(() => Math.random() - 0.5);
+        }
+
+        function checkAnswer(selected, correct) {
+            const message = document.getElementById("message");
+            if (selected === correct) {
+                message.innerText = "¡Correcto!";
+                message.className = "correct";
+                setTimeout(() => {
+                    currentIndex = (currentIndex + 1) % words.length;
+                    loadQuestion();
+                }, 1000);
+            } else {
+                message.innerText = "Incorrecto, intenta de nuevo.";
+                message.className = "incorrect";
+            }
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
